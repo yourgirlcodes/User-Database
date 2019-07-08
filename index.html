@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>PYTHON:User DataBase</title>
+</head>
+
+<body>
+
+    <label>Add a color:
+        <input type="text" name="color" required value="" class="form-control">
+    </label>
+
+    <button id="addUser" type="submit" class="btn btn-default">Add User</button>
+    <button id="getUser" type="submit" class="btn btn-default">Get Users</button>
+    <button id="deleteUser" type="submit" class="btn btn-default">Delete User</button>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+        integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
+        crossorigin="anonymous"></script>
+
+
+    <script>
+
+        $("#getUser").click(function () {
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:7000/api/getUsers",
+                dataType: 'json',
+
+                success: function (response) {
+
+                    console.log(response)
+
+                    for (var i = 0; i < response.length; i++) {
+                        $("body").append(`<div>"name: ${response[i].name}"</div>`);
+                    }
+                },
+                error: function (msg) {
+                },
+                complete: function (response, status) {
+                },
+            });
+
+        })
+
+        $("#addUser").click(function () {
+            var userAdded = $("input").val();
+
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:7000/api/addUser",
+                data: {
+                    name: userAdded
+                },
+
+                success: function (msg) {
+                    $("body").append(msg);
+                },
+
+            })
+        });
+
+        $("#deleteUser").click(function () {
+            var userAdded = $("input").val();
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:7000/api/deleteUser",
+                data: {
+                    name: userAdded
+                },
+
+                success: function (msg) {
+                    $("body").append(msg);
+                },
+
+            })
+        });
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
