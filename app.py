@@ -17,34 +17,27 @@ def get_user():
 
 
 @route('/api/addUser', method="POST")
-def add_user():
-    new_user = request.POST.get("name")
-
-    for thing in users:
-        if thing.get("name") != new_user:
-            message = messages[1]
-
-        else:users.append({"name": new_user})
-            message = messages[0]
-
-    return json.dumps(message)
+def add_color():
+    new_user = request.POST.get("name").lower()
+    for dict_el in users:
+        if new_user == dict_el.get("name"):
+            return json.dumps(messages[1])
+    new_dict_el = {
+        "name": new_user
+    }
+    users.append(new_dict_el)
+    return json.dumps(messages[0])
 
 
 @route('/api/deleteUser', method="POST")
 def delete_user():
-    user_to_delete = request.POST.get("name")
-    for thing in users:
-        print("delete")
-        for v in thing:
-            print(v)
+    delete_this_user = request.POST.get("name").lower()
+    for index, value in enumerate(users):
+        if value["name"] == delete_this_user:
+            del users[index]
+            return json.dumps(messages[3])
 
-            if user_to_delete is v:
-                print("in deleting function")
-                users.remove(thing)
-                return json.dumps(messages[3])
-            else:
-                print("in not deleting")
-                return json.dumps(messages[2])
+    return json.dumps(messages[2])
 
 
 def main():
