@@ -1,4 +1,4 @@
-from bottle import route, run, template, request, response
+from bottle import route, run, template, request, static_file
 import json
 
 
@@ -11,6 +11,11 @@ def index():
     return template("index.html")
 
 
+@route('/<filename:re:.*.css>', method='GET')
+def stylesheets(filename):
+    return static_file(filename, root='')
+
+
 @route('/api/getUsers', method="GET")
 def get_user():
     return json.dumps(users)
@@ -21,12 +26,12 @@ def add_color():
     new_user = request.POST.get("name").lower()
     for dict_el in users:
         if new_user == dict_el.get("name"):
-            return json.dumps(messages[1])
+            return json.dumps(messages[1]["msg"])
     new_dict_el = {
         "name": new_user
     }
     users.append(new_dict_el)
-    return json.dumps(messages[0])
+    return json.dumps(messages[0]["msg"])
 
 
 @route('/api/deleteUser', method="POST")
@@ -35,9 +40,9 @@ def delete_user():
     for index, value in enumerate(users):
         if value["name"] == delete_this_user:
             del users[index]
-            return json.dumps(messages[3])
+            return json.dumps(messages[3]["msg"])
 
-    return json.dumps(messages[2])
+    return json.dumps(messages[2]["msg"])
 
 
 def main():
